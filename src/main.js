@@ -18,9 +18,12 @@ const store = createStore(
     }))
 );
 
-const Counter = ({currentMove}) => {
+const Counter = ({sequence, surrStep}) => {
   return (
-    <h1>{currentMove}</h1>
+    <div>
+      <h1>{sequence}</h1>
+      <h2>{surrStep}</h2>
+    </div>
   )
 }
 
@@ -35,9 +38,23 @@ const Field = ({onCellClick}) => {
   )
 };
 
+const StartButton = ({onStartClick}) => {
+  return (
+    <button onClick={() => onStartClick()}>Start</button>
+  )
+}
+
+const Status = ({status}) => {
+  return (
+    <p>{status}</p>
+  )
+}
+
 const mapStateToProps = (state) => {
   return {
-    currentMove: state.gameReducer.currentMove
+    sequence: state.gameReducer.sequence,
+    surrStep: state.gameReducer.surrStep,
+    status: state.gameReducer.status
   }
 };
 
@@ -45,13 +62,18 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => {
       dispatch({ type: 'USER_MOVE', id: id })
+    },
+    onStartClick: () => {
+      dispatch({ type: 'START' })
     }
   }
 };
 
-const game = ({currentMove, onCellClick}) => (
+const game = ({sequence, surrStep, status, onCellClick, onStartClick}) => (
   <div>
-    <Counter currentMove={currentMove} />
+    <StartButton onStartClick={onStartClick} />
+    <Counter sequence={sequence} surrStep={surrStep} />
+    <Status status={status} />
     <Field onCellClick={onCellClick} />
   </div>
 );
