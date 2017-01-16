@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { gameReducer } from './reducer.js';
-import {onCellClick} from './actions.js';
+import { onCellClick } from './actions.js';
 
 
 const colors = ['green', 'red', 'yellow', 'blue'];
@@ -31,12 +31,15 @@ const Counter = ({sequence, surrStep}) => {
   )
 }
 
-const Field = ({onCellClick}) => {
+const Field = ({activeId, onCellClick}) => {
   return (
     <div className='playfield'>
-      {colors.map((val, i) => (
-        <div id={val} key={i} className='button' onClick={() => onCellClick(i + 1)}>{i + 1}</div>
-      ))}
+      {colors.map((val, i) => {
+        const className = i === activeId ? 'button active' : 'button';
+        return (
+          <div id={val} key={i} className={className} onClick={() => onCellClick(i)}>{i}</div>
+        )
+      })}
     </div >
   )
 };
@@ -57,7 +60,8 @@ const mapStateToProps = (state) => {
   return {
     sequence: state.gameReducer.sequence,
     currStep: state.gameReducer.currStep,
-    status: state.gameReducer.status
+    status: state.gameReducer.status,
+    activeId: state.gameReducer.activeId
   }
 };
 
@@ -71,12 +75,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const game = ({sequence, currStep, status, onCellClick, onStartClick}) => (
+const game = ({activeId, sequence, currStep, status, onCellClick, onStartClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
     <Counter sequence={sequence} currStep={currStep} />
     <Status status={status} />
-    <Field onCellClick={onCellClick} />
+    <Field activeId={activeId} onCellClick={onCellClick} />
   </div>
 );
 

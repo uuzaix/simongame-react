@@ -1,7 +1,8 @@
 .button {
-  height: 40px;
-  width: 40px;
-  border: 2px solid black
+  height: 60px;
+  width: 60px;
+  border: 2px solid black;
+  margin: 10px
 }
 
 #red {
@@ -16,4 +17,13 @@
 }
 #blue {
   background-color: dodgerblue
+}
+
+.playfield {
+  display: flex;
+  justify-content: left;
+}
+
+.button.active {
+  border: 6px solid orange;
 }

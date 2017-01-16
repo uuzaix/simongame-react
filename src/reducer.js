@@ -1,4 +1,4 @@
-const initialState = { isOn: false, status: 'waiting', sequence: [], currStep: 0, userInput: [] };
+const initialState = { isOn: false, status: 'off', sequence: [], currStep: 0, userInput: [], activeId: null };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -22,6 +22,9 @@ export const gameReducer = (state = initialState, action) => {
       }
       return state;
 
+    case 'CHANGE_STYLE':
+      return Object.assign({}, state, { activeId: action.id });
+
     default:
       return state;
   }
@@ -31,7 +34,7 @@ export const gameReducer = (state = initialState, action) => {
 const generateSequence = (len) => {
   let seq = [];
   while (seq.length < len) {
-    seq.push(Math.round(Math.random() * 3) + 1)
+    seq.push(Math.round(Math.random() * (len - 1)));
   }
   return seq;
 }

@@ -6,8 +6,14 @@ const sounds = [
 ];
 
 export const onCellClick = (id, dispatch) => {
-  sounds[id - 1].play();
-  dispatch({ type: 'USER_MOVE', id: id })
+  sounds[id].play();
+  dispatch({ type: 'USER_MOVE', id: id });
+  dispatch({ type: 'CHANGE_STYLE', id: id });
+  setTimeout(() => {dispatch({
+      type: 'CHANGE_STYLE',
+      id: null
+    });
+  }, 500);
 };
 
 const playSeq = (sequence, currStep) => {
