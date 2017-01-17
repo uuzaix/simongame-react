@@ -1,4 +1,4 @@
-const initialState = { isOn: false, status: 'off', sequence: [], currStep: 0, userInput: [], activeId: null };
+const initialState = { isOn: false, status: 'off', sequence: [0, 1, 1, 3], currStep: 0, userInput: [], activeId: null };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
