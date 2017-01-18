@@ -44,9 +44,9 @@ const Field = ({activeId, onCellClick}) => {
   )
 };
 
-const StartButton = ({sequence, onStartClick}) => {
+const StartButton = ({onStartClick}) => {
   return (
-    <button onClick={() => onStartClick(sequence)}>Start</button>
+    <button onClick={() => onStartClick()}>Start</button>
   )
 }
 
@@ -68,14 +68,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => onCellClick(id, dispatch),
-    onStartClick: (sequence) => onStartClick(sequence, dispatch)
+    onStartClick: () => onStartClick(dispatch)
   }
 };
 
 
 const game = ({activeId, sequence, currStep, status, onCellClick, onStartClick}) => (
   <div>
-    <StartButton sequence={sequence} onStartClick={onStartClick} />
+    <StartButton onStartClick={onStartClick} />
     <Counter sequence={sequence} currStep={currStep} />
     <Status status={status} />
     <Field activeId={activeId} onCellClick={onCellClick} />

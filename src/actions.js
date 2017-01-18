@@ -6,15 +6,9 @@ const sounds = [
 ];
 
 export const onCellClick = (id, dispatch) => {
-  sounds[id].play();
   dispatch({ type: 'USER_MOVE', id: id });
-  dispatch({ type: 'CHANGE_STYLE', id: id });
-  setTimeout(() => {
-    dispatch({
-      type: 'CHANGE_STYLE',
-      id: null
-    });
-  }, 500);
+  playCell(id, dispatch);
+  
 };
 
 
@@ -32,8 +26,8 @@ function playCell(id, dispatch) {
   }, 500);
 }
 
-const playSeq = (sequence, dispatch) => {
-  sequence.forEach((val, id) => {
+const playSeq = (sequence, step, dispatch) => {
+  sequence.slice(0, step).forEach((val, id) => {
     (function (v, i) {
       setTimeout(() => {
         playCell(v, dispatch)
@@ -42,8 +36,16 @@ const playSeq = (sequence, dispatch) => {
   })
 }
 
+export const onStartClick = (dispatch) => {
+  const sequence = generateSequence(4);
+  dispatch({ type: 'START', sequence: sequence });
+  playSeq(sequence, 2, dispatch);
+}
 
-export const onStartClick = (sequence, dispatch) => {
-  dispatch({ type: 'START' });
-  playSeq(sequence, dispatch);
+const generateSequence = (len) => {
+  let seq = [];
+  while (seq.length < len) {
+    seq.push(Math.round(Math.random() * (len - 1)));
+  }
+  return seq;
 }

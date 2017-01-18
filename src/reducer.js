@@ -1,4 +1,4 @@
-const initialState = { isOn: false, status: 'off', sequence: [0, 1, 1, 3], currStep: 0, userInput: [], activeId: null };
+const initialState = { isOn: false, status: 'off', sequence: [], currStep: 0, userInput: [], activeId: null };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -17,8 +17,7 @@ export const gameReducer = (state = initialState, action) => {
 
     case 'START':
       if (state.isOn === false || state.status !== 'Go!') {
-        const newSeq = generateSequence(4);
-        return Object.assign({}, initialState, { isOn: true, status: 'Go!', sequence: newSeq });
+        return Object.assign({}, initialState, { isOn: true, status: 'Go!', currStep: 1, sequence: action.sequence });
       }
       return state;
 
@@ -31,10 +30,3 @@ export const gameReducer = (state = initialState, action) => {
 }
 
 
-const generateSequence = (len) => {
-  let seq = [];
-  while (seq.length < len) {
-    seq.push(Math.round(Math.random() * (len - 1)));
-  }
-  return seq;
-}
