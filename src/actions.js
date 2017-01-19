@@ -5,12 +5,30 @@ const sounds = [
   new Audio('https://s3.amazonaws.com/freecodecamp/simonSound4.mp3')
 ];
 
-export const onCellClick = (id, dispatch) => {
-  dispatch({ type: 'USER_MOVE', id: id });
-  playCell(id, dispatch);
-  
+
+export const userMove = (id, dispatch) => {
+  return (dispatch, getState) => {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaa')
+    dispatch({ type: 'USER_MOVE', id: id });
+    new Promise((resolve) => {
+      resolve(playCell(id, dispatch))
+    })
+      .then(() => {
+        console.log('then')
+        const {gameReducer: {sequence, level, status}} = getState();
+        if (status === 'play') {
+          setTimeout(() => {
+            playSeq(sequence, level, dispatch)
+          }, 1500)
+        }
+      }
+      )
+  }
 };
 
+export const onCellClick = (id, dispatch) => {
+  dispatch(userMove(id, dispatch));
+};
 
 // arr.forEach(id => {(function (i) {setTimeout(() => {console.log(i);}, 1000*i)})(id)});
 
@@ -27,7 +45,7 @@ function playCell(id, dispatch) {
 }
 
 const playSeq = (sequence, step, dispatch) => {
-  sequence.slice(0, step).forEach((val, id) => {
+  sequence.slice(0, step + 1).forEach((val, id) => {
     (function (v, i) {
       setTimeout(() => {
         playCell(v, dispatch)
@@ -39,7 +57,7 @@ const playSeq = (sequence, step, dispatch) => {
 export const onStartClick = (dispatch) => {
   const sequence = generateSequence(4);
   dispatch({ type: 'START', sequence: sequence });
-  playSeq(sequence, 2, dispatch);
+  playSeq(sequence, 0, dispatch);
 }
 
 const generateSequence = (len) => {

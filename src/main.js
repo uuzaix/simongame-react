@@ -59,7 +59,7 @@ const Status = ({status}) => {
 const mapStateToProps = (state) => {
   return {
     sequence: state.gameReducer.sequence,
-    currStep: state.gameReducer.currStep,
+    level: state.gameReducer.level,
     status: state.gameReducer.status,
     activeId: state.gameReducer.activeId,
   }
@@ -73,10 +73,10 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const game = ({activeId, sequence, currStep, status, onCellClick, onStartClick}) => (
+const game = ({activeId, sequence, level, status, onCellClick, onStartClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
-    <Counter sequence={sequence} currStep={currStep} />
+    <Counter sequence={sequence} level={level} />
     <Status status={status} />
     <Field activeId={activeId} onCellClick={onCellClick} />
   </div>

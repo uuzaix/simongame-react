@@ -1,23 +1,22 @@
-const initialState = { isOn: false, status: 'off', sequence: [], currStep: 0, userInput: [], activeId: null };
+const initialState = { isOn: false, status: 'off', sequence: [], level: 0, step: 0, userInput: [], activeId: null };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'USER_MOVE':
       const currInput = [...state.userInput, action.id];
-      const newStep = state.currStep + 1;
-      if (newStep === state.sequence.length) {
-        if (currInput.join('') === state.sequence.join('')) {
-          return Object.assign({}, state, { status: 'Win', currStep: newStep, userInput: currInput });
+      if (action.id === state.sequence[state.step]) {
+        if (state.level + 1 === currInput.length) {
+          return Object.assign({}, state, { status: 'play', level: state.level + 1, step: 0, userInput: [] });
         }
-        return Object.assign({}, state, { status: 'Lose', currStep: newStep, userInput: currInput });
-      } else if (newStep < state.sequence.length) {
-        return Object.assign({}, state, { currStep: newStep, userInput: currInput });
+        return Object.assign({}, state, { status: 'listen', step: state.step + 1, userInput: currInput });
       }
+      return Object.assign({}, state, { status: 'play', step: 0, userInput: [] });
+
       return state;
 
     case 'START':
       if (state.isOn === false || state.status !== 'Go!') {
-        return Object.assign({}, initialState, { isOn: true, status: 'Go!', currStep: 1, sequence: action.sequence });
+        return Object.assign({}, initialState, { isOn: true, status: 'Go!', level: 0, sequence: action.sequence });
       }
       return state;
 
