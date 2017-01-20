@@ -6,15 +6,13 @@ const sounds = [
 ];
 
 
-export const userMove = (id, dispatch) => {
+const userMove = (id, dispatch) => {
   return (dispatch, getState) => {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaa')
     dispatch({ type: 'USER_MOVE', id: id });
     new Promise((resolve) => {
       resolve(playCell(id, dispatch))
     })
       .then(() => {
-        console.log('then')
         const {gameReducer: {sequence, level, status}} = getState();
         if (status === 'play') {
           setTimeout(() => {
@@ -51,7 +49,8 @@ const playSeq = (sequence, step, dispatch) => {
         playCell(v, dispatch)
       }, 2000 * i)
     })(val, id)
-  })
+  });
+
 }
 
 export const onStartClick = (dispatch) => {
@@ -66,4 +65,8 @@ const generateSequence = (len) => {
     seq.push(Math.round(Math.random() * (len - 1)));
   }
   return seq;
+}
+
+export const onStrictClick = (strictMode, dispatch) => {
+  dispatch({type: 'CHANGE_MODE', mode: !strictMode})
 }

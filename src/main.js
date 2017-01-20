@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { gameReducer } from './reducer.js';
-import { onCellClick, onStartClick } from './actions.js';
+import { onCellClick, onStartClick, onStrictClick } from './actions.js';
 
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
@@ -50,6 +50,12 @@ const StartButton = ({onStartClick}) => {
   )
 }
 
+const StrictButton = ({strictMode, onStrictClick}) => {
+  return (
+    <button onClick={() => onStrictClick(strictMode)}>Strict Mode</button>
+  )
+}
+
 const Status = ({status}) => {
   return (
     <p>{status}</p>
@@ -62,20 +68,23 @@ const mapStateToProps = (state) => {
     level: state.gameReducer.level,
     status: state.gameReducer.status,
     activeId: state.gameReducer.activeId,
+    strictMode: state.gameReducer.strictMode
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => onCellClick(id, dispatch),
-    onStartClick: () => onStartClick(dispatch)
+    onStartClick: () => onStartClick(dispatch),
+    onStrictClick: (strictMode) => onStrictClick(strictMode, dispatch)
   }
 };
 
 
-const game = ({activeId, sequence, level, status, onCellClick, onStartClick}) => (
+const game = ({activeId, sequence, level, status, onCellClick, onStartClick, onStrictClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
+    <StrictButton onStrictClick={onStrictClick} />
     <Counter sequence={sequence} level={level} />
     <Status status={status} />
     <Field activeId={activeId} onCellClick={onCellClick} />
