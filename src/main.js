@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { gameReducer } from './reducer.js';
-import { onCellClick, onStartClick, onStrictClick } from './actions.js';
+import { userMove, start, changeMode } from './actions.js';
 
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
@@ -22,27 +22,86 @@ const store = createStore(
     }))
 );
 
-const Counter = ({sequence, surrStep}) => {
+const Counter = ({sequence, currStep}) => {
   return (
     <div>
       <h1>{sequence}</h1>
-      <h2>{surrStep}</h2>
+      <h2>{currStep}</h2>
     </div>
   )
 }
 
-const Field = ({activeId, onCellClick}) => {
-  return (
-    <div className='playfield'>
-      {buttons.map((val, i) => {
-        const className = i === activeId ? 'button active' : 'button';
-        return (
-          <div id={val} key={i} className={className} onClick={() => onCellClick(i)}>{i}</div>
-        )
-      })}
-    </div >
-  )
+// const Field = ({activeId, onCellClick}) => {
+//   return (
+//     <div className='playfield'>
+//       {buttons.map((val, i) => {
+//         const className = i === activeId ? 'button active' : 'button';
+//         return (
+//           <div id={val} key={i} className={className} onClick={() => onCellClick(i)}>{i}</div>
+//         )
+//       })}
+//     </div >
+//   )
+// };
+
+
+export class Field extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: '',
+      showing: false
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (!this.state.showing && this.props.showSeq !== prevProps.showSeq) {
+      this.showSequence();
+    }
+  }
+
+  showSequence() {
+    this.setState({ showing: true });
+    const subSeq = this.props.sequence.slice(0, this.props.level + 1);
+    console.log(subseq);
+    const step = (subSeq) => {
+      if (subSeq.length === 0) {
+        this.reset(false);
+      } else {
+        this.show(subSeq[0]);
+        setTimeout(() => {
+          this.reset(true);
+          setTimeout(() => step(subSeq.slice(1)), 300)
+        }, 1000)
+      }
+    };
+    step(subSeq);
+  }
+
+
+  show(id) {
+    this.setState({ active: id })
+  }
+
+  reset(showing) {
+    this.setState({ active: '', showing })
+  }
+
+  render() {
+    return (
+      <div className='playfield'>
+        {buttons.map((val, i) => {
+          const className = i === this.state.active ? 'button active' : 'button';
+          return (
+            <div id={val} key={i} className={className} onClick={() => this.props.onCellClick(i)}>{i}</div>
+          )
+        })}
+      </div >
+    )
+  }
 };
+
+
+
 
 const StartButton = ({onStartClick}) => {
   return (
@@ -50,15 +109,15 @@ const StartButton = ({onStartClick}) => {
   )
 }
 
-const StrictButton = ({strictMode, onStrictClick}) => {
+const StrictButton = ({onStrictClick}) => {
   return (
-    <button onClick={() => onStrictClick(strictMode)}>Strict Mode</button>
+    <button onClick={() => onStrictClick()}>Strict Mode</button>
   )
 }
 
-const Status = ({status}) => {
+const Status = ({showSeq}) => {
   return (
-    <p>{status}</p>
+    <p>{showSeq}</p>
   )
 }
 
@@ -66,28 +125,27 @@ const mapStateToProps = (state) => {
   return {
     sequence: state.gameReducer.sequence,
     level: state.gameReducer.level,
-    status: state.gameReducer.status,
-    activeId: state.gameReducer.activeId,
+    showSeq: state.gameReducer.showSeq,
     strictMode: state.gameReducer.strictMode
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onCellClick: (id) => onCellClick(id, dispatch),
-    onStartClick: () => onStartClick(dispatch),
-    onStrictClick: (strictMode) => onStrictClick(strictMode, dispatch)
+    onCellClick: (id) => dispatch(userMove(id)),
+    onStartClick: () => dispatch(start()),
+    onStrictClick: (strictMode) => dispatch(changeMode())
   }
 };
 
 
-const game = ({activeId, sequence, level, status, onCellClick, onStartClick, onStrictClick}) => (
+const game = ({showSeq, sequence, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
     <StrictButton onStrictClick={onStrictClick} />
     <Counter sequence={sequence} level={level} />
-    <Status status={status} />
-    <Field activeId={activeId} onCellClick={onCellClick} />
+    <Status showSeq={showSeq} />
+    <Field showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
   </div>
 );
 
