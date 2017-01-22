@@ -11,6 +11,13 @@ import { userMove, start, changeMode } from './actions.js';
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
 
+const sounds = [
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound3.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound4.mp3')
+];
+
 const store = createStore(
   combineReducers({ gameReducer }),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
@@ -22,11 +29,11 @@ const store = createStore(
     }))
 );
 
-const Counter = ({sequence, currStep}) => {
+const Counter = ({sequence, level}) => {
   return (
     <div>
       <h1>{sequence}</h1>
-      <h2>{currStep}</h2>
+      <h2>{level}</h2>
     </div>
   )
 }
@@ -62,12 +69,13 @@ export class Field extends React.Component {
   showSequence() {
     this.setState({ showing: true });
     const subSeq = this.props.sequence.slice(0, this.props.level + 1);
-    console.log(subseq);
     const step = (subSeq) => {
       if (subSeq.length === 0) {
         this.reset(false);
       } else {
-        this.show(subSeq[0]);
+        const head = subSeq[0];
+        this.show(head);
+        sounds[head].play();
         setTimeout(() => {
           this.reset(true);
           setTimeout(() => step(subSeq.slice(1)), 300)
@@ -86,13 +94,24 @@ export class Field extends React.Component {
     this.setState({ active: '', showing })
   }
 
+  userClick(id) {
+    this.show(id);
+    sounds[id].play();
+    setTimeout(() => {
+      this.reset(false);
+      setTimeout(() => this.props.onCellClick(id), 1000)
+    }, 500)
+  }
+
+
+
   render() {
     return (
       <div className='playfield'>
         {buttons.map((val, i) => {
           const className = i === this.state.active ? 'button active' : 'button';
           return (
-            <div id={val} key={i} className={className} onClick={() => this.props.onCellClick(i)}>{i}</div>
+            <div id={val} key={i} className={className} onClick={() => this.userClick(i)}>{i}</div>
           )
         })}
       </div >
@@ -117,7 +136,7 @@ const StrictButton = ({onStrictClick}) => {
 
 const Status = ({showSeq}) => {
   return (
-    <p>{showSeq}</p>
+    <p>{showSeq.toString()}</p>
   )
 }
 
