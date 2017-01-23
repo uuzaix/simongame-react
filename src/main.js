@@ -5,7 +5,7 @@ import { Provider, connect } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import { gameReducer } from './reducer.js';
+import { game } from './reducer.js';
 import { userMove, start, changeMode } from './actions.js';
 
 
@@ -19,7 +19,7 @@ const sounds = [
 ];
 
 const store = createStore(
-  combineReducers({ gameReducer }),
+  combineReducers({ game }),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(
     ReduxThunk,
@@ -33,7 +33,7 @@ const Counter = ({sequence, level}) => {
   return (
     <div>
       <h1>{sequence}</h1>
-      <h2>{level}</h2>
+      <h2>{level + 1}</h2>
     </div>
   )
 }
@@ -103,8 +103,6 @@ export class Field extends React.Component {
     }, 500)
   }
 
-
-
   render() {
     return (
       <div className='playfield'>
@@ -119,9 +117,6 @@ export class Field extends React.Component {
   }
 };
 
-
-
-
 const StartButton = ({onStartClick}) => {
   return (
     <button onClick={() => onStartClick()}>Start</button>
@@ -134,18 +129,19 @@ const StrictButton = ({onStrictClick}) => {
   )
 }
 
-const Status = ({showSeq}) => {
+const Status = ({status}) => {
   return (
-    <p>{showSeq.toString()}</p>
+    <h2>{status}</h2>
   )
 }
 
 const mapStateToProps = (state) => {
   return {
-    sequence: state.gameReducer.sequence,
-    level: state.gameReducer.level,
-    showSeq: state.gameReducer.showSeq,
-    strictMode: state.gameReducer.strictMode
+    sequence: state.game.sequence,
+    level: state.game.level,
+    showSeq: state.game.showSeq,
+    strictMode: state.game.strictMode,
+    status: state.game.status
   }
 };
 
@@ -158,12 +154,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const game = ({showSeq, sequence, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
+const simon = ({showSeq, sequence, status, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
     <StrictButton onStrictClick={onStrictClick} />
     <Counter sequence={sequence} level={level} />
-    <Status showSeq={showSeq} />
+    <Status status={status} />
     <Field showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
   </div>
 );
@@ -171,7 +167,7 @@ const game = ({showSeq, sequence, level, displaying, onCellClick, onStartClick, 
 const App = connect(
   mapStateToProps,
   mapDispatchToProps
-)(game);
+)(simon);
 
 
 ReactDOM.render(
