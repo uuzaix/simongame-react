@@ -46,8 +46,14 @@
 
 // }
 
-export const start = () => {
+const start = () => {
   return { type: 'START', sequence: generateSequence(8) };
+}
+
+export const handleStart = () => {
+  return (dispatch) => {
+    setTimeout(() => dispatch(start()), 800)
+  }
 }
 
 const generateSequence = (len) => {
@@ -59,7 +65,7 @@ const generateSequence = (len) => {
 }
 
 export const changeMode = () => {
-  return {type: 'CHANGE_MODE'}
+  return { type: 'CHANGE_MODE' }
 }
 
 export const userMove = (id) => {

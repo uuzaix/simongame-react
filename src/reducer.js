@@ -1,8 +1,8 @@
-const initialState = { isOn: false, showSeq: false, status: '', strictMode: false, sequence: [], level: 0, step: 0, userInput: [] };
+const initialState = { isOn: false, showSeq: false, status: '', strictMode: false, sequence: [], level: -1, step: 0, userInput: [] };
 
 export const game = (state = initialState, action) => {
   switch (action.type) {
-    
+
     case 'USER_MOVE':
       const currInput = [...state.userInput, action.id];
       if (action.id === state.sequence[state.step]) {
@@ -21,7 +21,7 @@ export const game = (state = initialState, action) => {
 
 
     case 'START':
-      return Object.assign({}, initialState, { isOn: true, showSeq: !state.showSeq, status: '', sequence: action.sequence, strictMode: state.strictMode, });
+      return Object.assign({}, initialState, { isOn: true, showSeq: !state.showSeq, status: '', sequence: action.sequence, level: 0, strictMode: state.strictMode, });
 
     case 'CHANGE_MODE':
       return Object.assign({}, state, { strictMode: !state.strictMode });

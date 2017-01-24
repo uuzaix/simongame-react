@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { game } from './reducer.js';
-import { userMove, start, changeMode } from './actions.js';
+import { userMove, handleStart, changeMode } from './actions.js';
 
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
@@ -30,10 +30,11 @@ const store = createStore(
 );
 
 const Counter = ({sequence, level}) => {
+  const info = level < 0 ? "--" : level + 1
   return (
     <div>
       <h1>{sequence}</h1>
-      <h2>{level + 1}</h2>
+      <h2>{info}</h2>
     </div>
   )
 }
@@ -148,7 +149,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => dispatch(userMove(id)),
-    onStartClick: () => dispatch(start()),
+    onStartClick: () => dispatch(handleStart()),
     onStrictClick: (strictMode) => dispatch(changeMode())
   }
 };
