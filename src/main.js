@@ -83,7 +83,8 @@ export class Field extends React.Component {
         }, 1000)
       }
     };
-    step(subSeq);
+    setTimeout(() => step(subSeq), 1000)
+    
   }
 
 
@@ -96,11 +97,14 @@ export class Field extends React.Component {
   }
 
   userClick(id) {
+    if (this.state.showing || !this.props.isOn ) {
+      return
+    }
     this.show(id);
     sounds[id].play();
     setTimeout(() => {
       this.reset(false);
-      setTimeout(() => this.props.onCellClick(id), 1000)
+      this.props.onCellClick(id)
     }, 500)
   }
 
@@ -138,11 +142,12 @@ const Status = ({status}) => {
 
 const mapStateToProps = (state) => {
   return {
-    sequence: state.game.sequence,
-    level: state.game.level,
-    showSeq: state.game.showSeq,
+    isOn: state.game.isOn,
+    status: state.game.status,
     strictMode: state.game.strictMode,
-    status: state.game.status
+    showSeq: state.game.showSeq,
+    sequence: state.game.sequence,
+    level: state.game.level
   }
 };
 
@@ -155,13 +160,13 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const simon = ({showSeq, sequence, status, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
+const simon = ({isOn, showSeq, sequence, status, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
   <div>
     <StartButton onStartClick={onStartClick} />
     <StrictButton onStrictClick={onStrictClick} />
     <Counter sequence={sequence} level={level} />
     <Status status={status} />
-    <Field showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
+    <Field isOn={isOn} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
   </div>
 );
 

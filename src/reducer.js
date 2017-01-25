@@ -1,4 +1,4 @@
-const initialState = { isOn: false, showSeq: false, status: '', strictMode: false, sequence: [], level: -1, step: 0, userInput: [] };
+const initialState = { isOn: false, status: '', strictMode: false, showSeq: false, sequence: [], level: -1, step: 0, userInput: [] };
 
 export const game = (state = initialState, action) => {
   switch (action.type) {
@@ -10,18 +10,18 @@ export const game = (state = initialState, action) => {
           if (state.level + 1 === state.sequence.length) {
             return Object.assign({}, initialState, { status: 'Win!' });
           }
-          return Object.assign({}, state, { showSeq: !state.showSeq, status: '', level: state.level + 1, step: 0, userInput: [] });
+          return Object.assign({}, state, { status: '', showSeq: !state.showSeq, level: state.level + 1, step: 0, userInput: [] });
         }
-        return Object.assign({}, state, { step: state.step + 1, status: '', userInput: currInput });
+        return Object.assign({}, state, { status: '', step: state.step + 1, userInput: currInput });
       }
       if (state.strictMode) {
-        return Object.assign({}, initialState, {status: 'Shall we start over?'});
+        return Object.assign({}, initialState, { status: 'Shall we start over?', strictMode: state.strictMode });
       }
-      return Object.assign({}, state, { showSeq: !state.showSeq, status: 'Try one more time', step: 0, userInput: [] });
+      return Object.assign({}, state, { status: 'Try one more time', showSeq: !state.showSeq, step: 0, userInput: [] });
 
 
     case 'START':
-      return Object.assign({}, initialState, { isOn: true, showSeq: !state.showSeq, status: '', sequence: action.sequence, level: 0, strictMode: state.strictMode, });
+      return Object.assign({}, initialState, { isOn: true, status: '', strictMode: state.strictMode, showSeq: !state.showSeq, sequence: action.sequence, level: 0 });
 
     case 'CHANGE_MODE':
       return Object.assign({}, state, { strictMode: !state.strictMode });
