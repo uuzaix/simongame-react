@@ -8,20 +8,20 @@ export const game = (state = initialState, action) => {
       if (action.id === state.sequence[state.step]) {
         if (state.level + 1 === currInput.length) {
           if (state.level + 1 === state.sequence.length) {
-            return Object.assign({}, initialState, { status: 'Win!' });
+            return Object.assign({}, initialState, { status: '!!' });
           }
           return Object.assign({}, state, { status: '', showSeq: !state.showSeq, level: state.level + 1, step: 0, userInput: [] });
         }
         return Object.assign({}, state, { status: '', step: state.step + 1, userInput: currInput });
       }
       if (state.strictMode) {
-        return Object.assign({}, initialState, { status: 'Shall we start over?', strictMode: state.strictMode });
+        return Object.assign({}, initialState, { status: '!!', strictMode: state.strictMode });
       }
-      return Object.assign({}, state, { status: 'Try one more time', showSeq: !state.showSeq, step: 0, userInput: [] });
+      return Object.assign({}, state, { status: '!!', showSeq: !state.showSeq, step: 0, userInput: [] });
 
 
     case 'START':
-      return Object.assign({}, initialState, { isOn: true, status: '', strictMode: state.strictMode, showSeq: !state.showSeq, sequence: action.sequence, level: 0 });
+      return Object.assign({}, initialState, { isOn: true, strictMode: state.strictMode, showSeq: !state.showSeq, sequence: action.sequence, level: 0 });
 
     case 'CHANGE_MODE':
       return Object.assign({}, state, { strictMode: !state.strictMode });

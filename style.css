@@ -27,3 +27,36 @@
 .button.active {
   border: 6px solid orange;
 }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.strictButton {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border: 2px solid darkgrey;
+  outline: none;
+}
+
+.strictStatus {
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+  background-color: black;
+  border: 3px solid black;
+}
+.strictStatus.on {
+  background-color: yellow;
+}
+.strictName {
+  margin: 0px;
+}
+
+.strictDiv {
+  margin: 15px;
+}

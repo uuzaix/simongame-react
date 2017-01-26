@@ -29,29 +29,14 @@ const store = createStore(
     }))
 );
 
-const Counter = ({sequence, level}) => {
-  const info = level < 0 ? "--" : level + 1
+const Counter = ({status, sequence, level}) => {
+  const info = status === '' ? level + 1 : status
   return (
     <div>
-      <h1>{sequence}</h1>
-      <h2>{info}</h2>
+      <h1>{info}</h1>
     </div>
   )
 }
-
-// const Field = ({activeId, onCellClick}) => {
-//   return (
-//     <div className='playfield'>
-//       {buttons.map((val, i) => {
-//         const className = i === activeId ? 'button active' : 'button';
-//         return (
-//           <div id={val} key={i} className={className} onClick={() => onCellClick(i)}>{i}</div>
-//         )
-//       })}
-//     </div >
-//   )
-// };
-
 
 export class Field extends React.Component {
   constructor(props) {
@@ -84,7 +69,7 @@ export class Field extends React.Component {
       }
     };
     setTimeout(() => step(subSeq), 1000)
-    
+
   }
 
 
@@ -97,7 +82,7 @@ export class Field extends React.Component {
   }
 
   userClick(id) {
-    if (this.state.showing || !this.props.isOn ) {
+    if (this.state.showing || !this.props.isOn) {
       return
     }
     this.show(id);
@@ -122,15 +107,18 @@ export class Field extends React.Component {
   }
 };
 
-const StartButton = ({onStartClick}) => {
-  return (
-    <button onClick={() => onStartClick()}>Start</button>
-  )
-}
 
-const StrictButton = ({onStrictClick}) => {
+const Controls = ({strictMode, onStrictClick, onStartClick}) => {
+  const strictStatus = strictMode ? 'strictStatus on' : 'strictStatus'
   return (
-    <button onClick={() => onStrictClick()}>Strict Mode</button>
+    <div className='controls'>
+      <button onClick={() => onStartClick()}>Start</button>
+      <div className='strictDiv'>
+        <div className={strictStatus}></div>
+        <button className='strictButton' onClick={() => onStrictClick()}></button>
+        <p className='strictName'>Strict mode</p>
+      </div>
+    </div>
   )
 }
 
@@ -155,16 +143,15 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => dispatch(userMove(id)),
     onStartClick: () => dispatch(handleStart()),
-    onStrictClick: (strictMode) => dispatch(changeMode())
+    onStrictClick: () => dispatch(changeMode())
   }
 };
 
 
-const simon = ({isOn, showSeq, sequence, status, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
+const simon = ({isOn, showSeq, sequence, status, strictMode, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
   <div>
-    <StartButton onStartClick={onStartClick} />
-    <StrictButton onStrictClick={onStrictClick} />
-    <Counter sequence={sequence} level={level} />
+    <Controls strictMode={strictMode} onStrictClick={onStrictClick} onStartClick={onStartClick} />
+    <Counter status={status} sequence={sequence} level={level} />
     <Status status={status} />
     <Field isOn={isOn} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
   </div>
