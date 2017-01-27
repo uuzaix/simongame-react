@@ -17,7 +17,10 @@ export const game = (state = initialState, action) => {
       if (state.strictMode) {
         return Object.assign({}, initialState, { status: '!!', strictMode: state.strictMode });
       }
-      return Object.assign({}, state, { status: '!!', showSeq: !state.showSeq, step: 0, userInput: [] });
+      return Object.assign({}, state, { status: '!!', step: 0, userInput: [] });
+
+    case 'END_OF_ERROR':
+      return Object.assign({}, state, { status: '', showSeq: !state.showSeq });
 
 
     case 'START':

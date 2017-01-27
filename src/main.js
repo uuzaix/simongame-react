@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { game } from './reducer.js';
-import { userMove, handleStart, changeMode } from './actions.js';
+import { userMove, handleStart, changeMode, endOfError } from './actions.js';
 
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
@@ -29,16 +29,39 @@ const store = createStore(
     }))
 );
 
-const Counter = ({status, sequence, level}) => {
-  const info = status === '' ? level + 1 : status
-  return (
-    <div>
-      <h1>{info}</h1>
-    </div>
-  )
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.status !== '' && prevProps.status === '') {
+      this.blink(this.props.onError);
+    }
+  }
+  blink(f) {
+    setTimeout(() => {
+      this.setState({ visible: false });
+      setTimeout(() => {
+        this.setState({ visible: true });
+        f()
+      }, 1000)
+    }, 1000)
+  }
+
+  render() {
+    const info = this.props.status === '' ? this.props.level + 1 : this.props.status;
+    return (
+      <div>
+        <h1 style={{ visibility: this.state.visible ? 'visible' : 'hidden' }}>{info}</h1>
+      </div>
+    )
+  }
 }
 
-export class Field extends React.Component {
+class Field extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,10 +131,10 @@ export class Field extends React.Component {
 };
 
 
-const Controls = ({strictMode, onStrictClick, onStartClick}) => {
+const ControlButtons = ({ strictMode, onStrictClick, onStartClick, onError}) => {
   const strictStatus = strictMode ? 'strictStatus on' : 'strictStatus'
   return (
-    <div className='controls'>
+    <div>
       <button onClick={() => onStartClick()}>Start</button>
       <div className='strictDiv'>
         <div className={strictStatus}></div>
@@ -122,11 +145,6 @@ const Controls = ({strictMode, onStrictClick, onStartClick}) => {
   )
 }
 
-const Status = ({status}) => {
-  return (
-    <h2>{status}</h2>
-  )
-}
 
 const mapStateToProps = (state) => {
   return {
@@ -143,17 +161,23 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onCellClick: (id) => dispatch(userMove(id)),
     onStartClick: () => dispatch(handleStart()),
-    onStrictClick: () => dispatch(changeMode())
+    onStrictClick: () => dispatch(changeMode()),
+    onError: () => dispatch(endOfError())
   }
 };
 
+const Controls = ({status, strictMode, level, onStartClick, onStrictClick, onError}) => (
+  <div className='controls'>
+    <Counter status={status} level={level} onError={onError} />
+    <ControlButtons strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
+  </div>
 
-const simon = ({isOn, showSeq, sequence, status, strictMode, level, displaying, onCellClick, onStartClick, onStrictClick}) => (
-  <div>
-    <Controls strictMode={strictMode} onStrictClick={onStrictClick} onStartClick={onStartClick} />
-    <Counter status={status} sequence={sequence} level={level} />
-    <Status status={status} />
+)
+
+const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, onError}) => (
+  <div className={'flexContainer'}>
     <Field isOn={isOn} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
+    <Controls status={status} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} onError={onError} />
   </div>
 );
 
