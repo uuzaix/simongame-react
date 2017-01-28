@@ -54,12 +54,40 @@ class Counter extends React.Component {
   render() {
     const info = this.props.status === '' ? this.props.level + 1 : this.props.status;
     return (
-      <div>
-        <h1 style={{ visibility: this.state.visible ? 'visible' : 'hidden' }}>{info}</h1>
+      <div className='group'>
+        <div style={{ visibility: this.state.visible ? 'visible' : 'hidden' }}>{info}</div>
+        <div className='label'>COUNT</div>
       </div>
     )
   }
 }
+
+const StartButton = ({ onStartClick}) => {
+  return (
+    <div className='group'>
+      <button className='button' onClick={() => onStartClick()}></button>
+      <div className='label'>START</div>
+    </div>
+  )
+}
+const StrictButton = ({ strictMode, onStrictClick}) => {
+  const strictStatus = strictMode ? 'strictStatus on' : 'strictStatus'
+  return (
+    <div className='strictDiv group'>
+      <div className={strictStatus}></div>
+      <button className='button yellow' onClick={() => onStrictClick()}></button>
+      <div className='label'>STRICT</div>
+    </div>
+  )
+}
+
+const Controls = ({status, strictMode, level, onStartClick, onStrictClick, onError}) => (
+  <div className='controls'>
+    <Counter status={status} level={level} onError={onError} />
+    <StartButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
+    <StrictButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
+  </div>
+)
 
 class Field extends React.Component {
   constructor(props) {
@@ -120,30 +148,15 @@ class Field extends React.Component {
     return (
       <div className='playfield'>
         {buttons.map((val, i) => {
-          const className = i === this.state.active ? 'button active' : 'button';
+          const className = i === this.state.active ? 'cell active' : 'cell';
           return (
-            <div id={val} key={i} className={className} onClick={() => this.userClick(i)}>{i}</div>
+            <div id={val} key={i} className={className} onClick={() => this.userClick(i)}></div>
           )
         })}
       </div >
     )
   }
 };
-
-
-const ControlButtons = ({ strictMode, onStrictClick, onStartClick, onError}) => {
-  const strictStatus = strictMode ? 'strictStatus on' : 'strictStatus'
-  return (
-    <div>
-      <button onClick={() => onStartClick()}>Start</button>
-      <div className='strictDiv'>
-        <div className={strictStatus}></div>
-        <button className='strictButton' onClick={() => onStrictClick()}></button>
-        <p className='strictName'>Strict mode</p>
-      </div>
-    </div>
-  )
-}
 
 
 const mapStateToProps = (state) => {
@@ -166,13 +179,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const Controls = ({status, strictMode, level, onStartClick, onStrictClick, onError}) => (
-  <div className='controls'>
-    <Counter status={status} level={level} onError={onError} />
-    <ControlButtons strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
-  </div>
-
-)
 
 const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, onError}) => (
   <div className={'flexContainer'}>
