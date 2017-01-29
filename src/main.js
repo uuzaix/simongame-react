@@ -55,7 +55,9 @@ class Counter extends React.Component {
     const info = this.props.status === '' ? this.props.level + 1 : this.props.status;
     return (
       <div className='group'>
-        <div style={{ visibility: this.state.visible ? 'visible' : 'hidden' }}>{info}</div>
+        <div className='counterDiv'>
+          <p className='counter' style={{ visibility: this.state.visible ? 'visible' : 'hidden' }}>{info}</p>
+        </div>
         <div className='label'>COUNT</div>
       </div>
     )
@@ -86,6 +88,7 @@ const Controls = ({status, strictMode, level, onStartClick, onStrictClick, onErr
     <Counter status={status} level={level} onError={onError} />
     <StartButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
     <StrictButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
+    <h1 className='gameName'>simon</h1>
   </div>
 )
 

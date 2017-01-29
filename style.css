@@ -57,9 +57,9 @@
   height: 250px;
   border: 12px solid #333;
   display: flex;
-  /*flex-wrap: wrap;*/
+  flex-wrap: wrap-reverse;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .button {
@@ -69,14 +69,17 @@
   background-color: red;
   border: 5px solid #333;
   outline: none;
+  margin: 3px;
 }
+
 
 .strictStatus {
   border-radius: 50%;
-  height: 8px;
-  width: 8px;
+  height: 10px;
+  width: 10px;
   background-color: black;
   border: 2px solid black;
+  margin: 2px;
 }
 .strictStatus.on {
   background-color: red;
@@ -86,16 +89,9 @@
   background-color: yellow;
 }
 
-/*.controlButtons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}*/
-
 .group {
-  height: 80px;
-  width: 70px;
+  height: 90px;
+  width: 60px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -105,4 +101,28 @@
 .label {
   font-size: .9em;
   margin: 10px;
+}
+
+.gameName {
+  font-size: 3em;
+  margin: 0px;
+  align-self: flex-start;
+  font-family: 'Coda', cursive;
+}
+
+.counterDiv {
+  width: 50px;
+  height: 40px;
+  background-color: #333;
+  color: red;
+  border-radius: 20%;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter {
+  font-size: 2em;
+  font-family: 'VT323', monospace
 }
