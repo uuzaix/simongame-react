@@ -2,7 +2,11 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-} 
+}
+
+body {
+  background-color: #DCC7AA;
+}
 
 .flexContainer {
   display: flex;
@@ -11,8 +15,8 @@
   width: 520px;
   height: 520px;
   border-radius: 100%;
-  border: solid 10px #333;
-  background-color: #333;
+  border: solid 10px #333333;
+  background-color: #333333;
 }
 
 .playfield {
@@ -27,32 +31,49 @@
 }
 
 #red {
-  background-color: red;
+  background-color: #C60005;
+  /*background-color: #e41100;*/
   border-top-right-radius: 100%;
 }
 
 #yellow {
-  background-color: yellow;
+  /*background-color:	#C78000;*/
+  background-color:	#ffb301;
   border-bottom-left-radius: 100%;
 }
 #green {
-  background-color: green;
+  background-color: #009F00;
+  /*background-color: #009913;*/
   border-top-left-radius: 100%;
 }
 #blue {
-  background-color: dodgerblue;
+  background-color:	#00587E;
+  /*background-color:	#00587e;*/
   border-bottom-right-radius: 100%;
 }
 
-.cell.active {
-  border: 6px solid orange;
+.cell.active#red {
+  background-color: 	#FF475E;
+  /*background-color: 	#fe3928;*/
+}
+.cell.active#yellow {
+  /*background-color:	#FFA400;*/
+  background-color:	#ffff00;
+}
+.cell.active#green {
+  background-color: #00EC00;
+  /*background-color: #05b917;*/
+}
+.cell.active#blue {
+  background-color:	#009ADD;
+  /*background-color:	#00a9f4;*/
 }
 
 .controls {
   position: absolute;
   border-radius: 100%;
   margin: 125px 0 0 125px;
-  background: white  ;
+  background: #e3dbe6;
   width: 250px;
   height: 250px;
   border: 12px solid #333;
@@ -66,8 +87,8 @@
   border-radius: 50%;
   height: 30px;
   width: 30px;
-  background-color: red;
-  border: 5px solid #333;
+  background-color: 	#ff0000;
+  border: 5px solid 	#333333;
   outline: none;
   margin: 3px;
 }
@@ -90,7 +111,7 @@
 }
 
 .group {
-  height: 90px;
+  height: 95px;
   width: 60px;
   display: flex;
   flex-direction: column;

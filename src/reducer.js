@@ -19,12 +19,12 @@ export const game = (state = initialState, action) => {
       }
       return Object.assign({}, state, { status: '!!', step: 0, userInput: [] });
 
-    case 'END_OF_ERROR':
+    case 'NOTIFY':
       return Object.assign({}, state, { status: '', showSeq: !state.showSeq });
 
 
     case 'START':
-      return Object.assign({}, initialState, { isOn: true, strictMode: state.strictMode, showSeq: !state.showSeq, sequence: action.sequence, level: 0 });
+      return Object.assign({}, initialState, { isOn: true, status: '--', strictMode: state.strictMode, sequence: action.sequence, level: 0 });
 
     case 'CHANGE_MODE':
       return Object.assign({}, state, { strictMode: !state.strictMode });

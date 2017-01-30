@@ -29,6 +29,6 @@ export const userMove = (id) => {
   }
 }
 
-export const endOfError = () => {
-  return { type: 'END_OF_ERROR' }
+export const notify = () => {
+  return { type: 'NOTIFY' }
 }

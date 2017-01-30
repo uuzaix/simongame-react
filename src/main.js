@@ -6,7 +6,7 @@ import ReduxThunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import { game } from './reducer.js';
-import { userMove, handleStart, changeMode, endOfError } from './actions.js';
+import { userMove, handleStart, changeMode, notify } from './actions.js';
 
 
 const buttons = ['green', 'red', 'yellow', 'blue'];
@@ -38,21 +38,26 @@ class Counter extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.status !== '' && prevProps.status === '') {
-      this.blink(this.props.onError);
+      this.blink();
+      setTimeout(() => {
+        this.blink();
+        setTimeout(() => {
+          this.props.notify()
+        }, 500)
+      }, 1500)
     }
   }
-  blink(f) {
+  blink() {
     setTimeout(() => {
       this.setState({ visible: false });
       setTimeout(() => {
         this.setState({ visible: true });
-        f()
-      }, 1000)
-    }, 1000)
+      }, 500)
+    }, 500)
   }
 
   render() {
-    const info = this.props.status === '' ? this.props.level + 1 : this.props.status;
+    const info = (this.props.status === '' && this.props.level !== -1) ? this.props.level + 1 : this.props.status;
     return (
       <div className='group'>
         <div className='counterDiv'>
@@ -83,9 +88,9 @@ const StrictButton = ({ strictMode, onStrictClick}) => {
   )
 }
 
-const Controls = ({status, strictMode, level, onStartClick, onStrictClick, onError}) => (
+const Controls = ({status, strictMode, level, onStartClick, onStrictClick, notify}) => (
   <div className='controls'>
-    <Counter status={status} level={level} onError={onError} />
+    <Counter status={status} level={level} notify={notify} />
     <StartButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
     <StrictButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
     <h1 className='gameName'>simon</h1>
@@ -178,15 +183,15 @@ const mapDispatchToProps = (dispatch) => {
     onCellClick: (id) => dispatch(userMove(id)),
     onStartClick: () => dispatch(handleStart()),
     onStrictClick: () => dispatch(changeMode()),
-    onError: () => dispatch(endOfError())
+    notify: () => dispatch(notify())
   }
 };
 
 
-const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, onError}) => (
+const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, notify}) => (
   <div className={'flexContainer'}>
     <Field isOn={isOn} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
-    <Controls status={status} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} onError={onError} />
+    <Controls status={status} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} notify={notify} />
   </div>
 );
 
