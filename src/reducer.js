@@ -8,7 +8,7 @@ export const game = (state = initialState, action) => {
       if (action.id === state.sequence[state.step]) {
         if (state.level + 1 === currInput.length) {
           if (state.level + 1 === state.sequence.length) {
-            return Object.assign({}, initialState, { status: '!!' });
+            return Object.assign({}, initialState, { status: '**', showSeq: !state.showSeq });
           }
           return Object.assign({}, state, { status: '', showSeq: !state.showSeq, level: state.level + 1, step: 0, userInput: [] });
         }

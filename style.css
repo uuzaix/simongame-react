@@ -12,8 +12,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin: 100px auto;
-  width: 520px;
-  height: 520px;
+  width: 500px;
+  height: 500px;
   border-radius: 100%;
   border: solid 10px #333333;
   background-color: #333333;
@@ -26,53 +26,46 @@ body {
 
 .cell {
   margin: auto;
-  height: 240px;
-  width: 240px;
+  height: 220px;
+  width: 220px;
 }
 
 #red {
   background-color: #C60005;
-  /*background-color: #e41100;*/
   border-top-right-radius: 100%;
 }
 
 #yellow {
-  /*background-color:	#C78000;*/
-  background-color:	#ffb301;
+  background-color: #ffb301;
   border-bottom-left-radius: 100%;
 }
 #green {
   background-color: #009F00;
-  /*background-color: #009913;*/
   border-top-left-radius: 100%;
 }
 #blue {
-  background-color:	#00587E;
-  /*background-color:	#00587e;*/
+  background-color: #00587E;
   border-bottom-right-radius: 100%;
 }
 
 .cell.active#red {
-  background-color: 	#FF475E;
-  /*background-color: 	#fe3928;*/
+  background-color: #FF475E;
 }
 .cell.active#yellow {
-  /*background-color:	#FFA400;*/
-  background-color:	#ffff00;
+  background-color: #ffff00;
 }
 .cell.active#green {
   background-color: #00EC00;
-  /*background-color: #05b917;*/
 }
+
 .cell.active#blue {
-  background-color:	#009ADD;
-  /*background-color:	#00a9f4;*/
+  background-color: #009ADD;
 }
 
 .controls {
   position: absolute;
   border-radius: 100%;
-  margin: 125px 0 0 125px;
+  margin: 115px 0 0 115px;
   background: #e3dbe6;
   width: 250px;
   height: 250px;
@@ -87,8 +80,8 @@ body {
   border-radius: 50%;
   height: 30px;
   width: 30px;
-  background-color: 	#ff0000;
-  border: 5px solid 	#333333;
+  background-color: #ff0000;
+  border: 5px solid #333333;
   outline: none;
   margin: 3px;
 }

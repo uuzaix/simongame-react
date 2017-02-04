@@ -1,7 +1,7 @@
 
 
 const start = () => {
-  return { type: 'START', sequence: generateSequence(8) };
+  return { type: 'START', sequence: generateSequence(20) };
 }
 
 export const handleStart = () => {

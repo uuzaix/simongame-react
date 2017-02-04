@@ -37,16 +37,18 @@ class Counter extends React.Component {
     }
   }
   componentDidUpdate(prevProps) {
-    if (this.props.status !== '' && prevProps.status === '') {
-      this.blink();
-      setTimeout(() => {
-        this.blink();
+    if (this.props.status !== '' && prevProps.status === '' || (this.props.status === '--' && prevProps.status === '**')) {
+      if (this.props.status === '**') {
+        this.blinkTwice()
+      } else {
+        this.blinkTwice()
         setTimeout(() => {
           this.props.notify()
-        }, 500)
-      }, 1500)
+        }, 2500)
+      }
     }
   }
+
   blink() {
     setTimeout(() => {
       this.setState({ visible: false });
@@ -54,6 +56,13 @@ class Counter extends React.Component {
         this.setState({ visible: true });
       }, 500)
     }, 500)
+  }
+
+  blinkTwice() {
+    this.blink();
+    setTimeout(() => {
+      this.blink();
+    }, 1500)
   }
 
   render() {
@@ -107,30 +116,32 @@ class Field extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (!this.state.showing && this.props.showSeq !== prevProps.showSeq) {
-      this.showSequence();
+      if (this.props.status === '**') {
+        const winSeq = Array(3).fill(prevProps.sequence[prevProps.level]);
+        this.showSequence(winSeq, 500);
+      } else {
+        this.showSequence(this.props.sequence.slice(0, this.props.level + 1), 1000);
+      }
     }
   }
 
-  showSequence() {
+  showSequence(seq, delay) {
     this.setState({ showing: true });
-    const subSeq = this.props.sequence.slice(0, this.props.level + 1);
-    const step = (subSeq) => {
-      if (subSeq.length === 0) {
+    const step = (seq) => {
+      if (seq.length === 0) {
         this.reset(false);
       } else {
-        const head = subSeq[0];
+        const head = seq[0];
         this.show(head);
         sounds[head].play();
         setTimeout(() => {
           this.reset(true);
-          setTimeout(() => step(subSeq.slice(1)), 300)
-        }, 1000)
+          setTimeout(() => step(seq.slice(1)), delay / 3)
+        }, delay)
       }
     };
-    setTimeout(() => step(subSeq), 1000)
-
+    setTimeout(() => step(seq), delay)
   }
-
 
   show(id) {
     this.setState({ active: id })
@@ -190,7 +201,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, notify}) => (
   <div className={'flexContainer'}>
-    <Field isOn={isOn} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
+    <Field isOn={isOn} status={status} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
     <Controls status={status} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} notify={notify} />
   </div>
 );
