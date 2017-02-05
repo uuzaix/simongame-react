@@ -37,8 +37,8 @@ class Counter extends React.Component {
     }
   }
   componentDidUpdate(prevProps) {
-    if (this.props.status !== '' && prevProps.status === '' || (this.props.status === '--' && prevProps.status === '**')) {
-      if (this.props.status === '**') {
+    if (this.props.message !== '' && prevProps.message === '' || (this.props.message === '--' && prevProps.message === '**')) {
+      if (this.props.message === '**') {
         this.blinkTwice()
       } else {
         this.blinkTwice()
@@ -66,7 +66,7 @@ class Counter extends React.Component {
   }
 
   render() {
-    const info = (this.props.status === '' && this.props.level !== -1) ? this.props.level + 1 : this.props.status;
+    const info = (this.props.message === '' && this.props.level !== -1) ? this.props.level + 1 : this.props.message;
     return (
       <div className='group'>
         <div className='counterDiv'>
@@ -97,9 +97,9 @@ const StrictButton = ({ strictMode, onStrictClick}) => {
   )
 }
 
-const Controls = ({status, strictMode, level, onStartClick, onStrictClick, notify}) => (
+const Controls = ({message, strictMode, level, onStartClick, onStrictClick, notify}) => (
   <div className='controls'>
-    <Counter status={status} level={level} notify={notify} />
+    <Counter message={message} level={level} notify={notify} />
     <StartButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
     <StrictButton strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} />
     <h1 className='gameName'>simon</h1>
@@ -116,12 +116,15 @@ class Field extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (!this.state.showing && this.props.showSeq !== prevProps.showSeq) {
-      if (this.props.status === '**') {
+      if (this.props.message === '**') {
         const winSeq = Array(3).fill(prevProps.sequence[prevProps.level]);
         this.showSequence(winSeq, 500);
-      } else {
+      } else if (this.props.message === '' && this.props.isOn) {
         this.showSequence(this.props.sequence.slice(0, this.props.level + 1), 1000);
       }
+    }
+    if (!this.props.isOn && this.props.message === '' && prevProps.message === '!!') {
+      this.props.onStartClick();
     }
   }
 
@@ -181,7 +184,7 @@ class Field extends React.Component {
 const mapStateToProps = (state) => {
   return {
     isOn: state.game.isOn,
-    status: state.game.status,
+    message: state.game.message,
     strictMode: state.game.strictMode,
     showSeq: state.game.showSeq,
     sequence: state.game.sequence,
@@ -199,10 +202,10 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const simon = ({isOn, showSeq, sequence, status, strictMode, level, onCellClick, onStartClick, onStrictClick, notify}) => (
+const simon = ({isOn, showSeq, sequence, message, strictMode, level, onCellClick, onStartClick, onStrictClick, notify}) => (
   <div className={'flexContainer'}>
-    <Field isOn={isOn} status={status} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} />
-    <Controls status={status} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} notify={notify} />
+    <Field isOn={isOn} message={message} showSeq={showSeq} sequence={sequence} level={level} onCellClick={onCellClick} onStartClick={onStartClick} />
+    <Controls message={message} level={level} strictMode={strictMode} onStartClick={onStartClick} onStrictClick={onStrictClick} notify={notify} />
   </div>
 );
 
