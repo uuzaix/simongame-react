@@ -44,7 +44,7 @@ class Counter extends React.Component {
         this.blinkTwice()
         setTimeout(() => {
           this.props.notify()
-        }, 2500)
+        }, 1500)
       }
     }
   }
@@ -54,15 +54,15 @@ class Counter extends React.Component {
       this.setState({ visible: false });
       setTimeout(() => {
         this.setState({ visible: true });
-      }, 500)
-    }, 500)
+      }, 300)
+    }, 300)
   }
 
   blinkTwice() {
     this.blink();
     setTimeout(() => {
       this.blink();
-    }, 1500)
+    }, 900)
   }
 
   render() {

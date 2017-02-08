@@ -139,9 +139,6 @@ body {
   flex-wrap: wrap-reverse;
   justify-content: center;
   align-items: center;
-}
-
-.counter {
   font-size: 2em;
   font-family: 'VT323', monospace
 }
